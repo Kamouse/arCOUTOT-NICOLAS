@@ -1,9 +1,13 @@
+/* style.css */
+
+/* On empêche le scroll car c'est une appli plein écran */
 body {
   margin: 0;
   overflow: hidden;
+  font-family: sans-serif;
 }
 
-/* Loader simple */
+/* L'écran de chargement (Loader) */
 .arjs-loader {
   height: 100%;
   width: 100%;
@@ -17,7 +21,11 @@ body {
   align-items: center;
 }
 
+/* Le texte du chargement */
 .arjs-loader div {
+  text-align: center;
+  font-size: 1.25em;
   color: white;
-  font-family: sans-serif;
+  font-weight: bold;
+  letter-spacing: 1px;
 }

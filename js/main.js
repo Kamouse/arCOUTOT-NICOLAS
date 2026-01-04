@@ -1,27 +1,25 @@
 // js/main.js
 
-// On attend que toute la page HTML soit chargée
 window.addEventListener('load', () => {
-    console.log("Application AR : Démarrage...");
+    console.log("Application AR : Initialisation...");
 
     const scene = document.querySelector('a-scene');
     const loader = document.querySelector('.arjs-loader');
 
-    // 1. GESTION DU CHARGEMENT (LOADER)
-    // L'événement 'loaded' est déclenché quand la caméra est prête
+    // 1. FIN DU CHARGEMENT
+    // Quand la caméra est active et la 3D prête
     scene.addEventListener('loaded', () => {
-        console.log(">>> Caméra active et scène 3D prête !");
+        console.log(">>> Système prêt. En attente du marqueur.");
         
-        // On cache l'écran noir de chargement
+        // On fait disparaître l'écran de chargement
         if (loader) {
             loader.style.display = 'none';
         }
     });
 
-    // 2. GESTION DES ERREURS CAMÉRA
-    // Si l'utilisateur refuse la caméra, on le prévient
+    // 2. GESTION DES ERREURS
     scene.addEventListener('camera-error', (error) => {
-        console.error("Erreur d'accès à la caméra :", error);
-        alert("Attention : L'accès à la caméra est nécessaire pour voir la carte.");
+        console.error("Erreur d'accès caméra :", error);
+        alert("Erreur : L'accès à la caméra est requis pour l'expérience AR.");
     });
 });
