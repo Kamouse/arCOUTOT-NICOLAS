@@ -6,70 +6,62 @@ AFRAME.registerComponent('flippable-card', {
   },
 
   init: function () {
+    this.isFlipped = false; // État initial (Recto)
     const el = this.el; // Le marqueur
-    this.isFlipped = false; // Variable pour savoir si on est recto ou verso
 
-    // Chargement des données
+    // Récupération des données
     fetch(this.data.jsonData)
       .then(response => response.json())
-      .then(data => {
-        this.createCardObject(el, data);
-      });
+      .then(data => this.createCard(el, data));
   },
 
-  createCardObject: function (parent, data) {
-    // 1. CRÉATION DU CONTENEUR (Le pivot qui va tourner)
-    const cardContainer = document.createElement('a-entity');
-    // On le place un peu en hauteur pour qu'il flotte
-    cardContainer.setAttribute('position', '0 0.5 0'); 
-    // On le met vertical (debout) pour bien le voir tourner, ou à plat selon ton goût
-    // Ici : rotation initiale à -90 sur X pour être à plat face caméra, ou 0 pour être debout.
-    // Pour une carte sur table, le mieux est qu'elle flotte à plat :
-    cardContainer.setAttribute('rotation', '-90 0 0'); 
-
-    // Classe pour le raycaster (pour que le clic marche)
-    cardContainer.setAttribute('class', 'clickable');
+  createCard: function (parent, data) {
+    // 1. CRÉATION DU CONTENEUR PIVOT
+    // C'est cet objet invisible qui va tourner quand on clique dessus
+    const container = document.createElement('a-entity');
     
-    // --- FACE A : RECTO ---
+    // Position : Un peu en hauteur (0.5)
+    // Rotation initiale : -90° sur X pour être à plat face au plafond (sur la table)
+    container.setAttribute('position', '0 0.5 0');
+    container.setAttribute('rotation', '-90 0 0');
+    
+    // IMPORTANT : La classe 'clickable' pour que le raycaster le détecte
+    container.setAttribute('class', 'clickable');
+
+    // 2. CRÉATION DU RECTO (IMAGE 1)
     const recto = document.createElement('a-image');
-    recto.setAttribute('src', data.images.recto);
-    // TAILLE PLUS GRANDE (Demandé)
-    recto.setAttribute('width', '3.5'); 
-    recto.setAttribute('height', '2');
-    recto.setAttribute('position', '0 0 0.01'); // Légèrement décalé pour pas toucher l'autre
-    cardContainer.appendChild(recto);
+    recto.setAttribute('src', data.recto);
+    recto.setAttribute('width', '4');   // TRES GRANDE CARTE
+    recto.setAttribute('height', '2.2');
+    recto.setAttribute('position', '0 0 0.02'); // Légèrement devant le centre
+    container.appendChild(recto);
 
-    // --- FACE B : VERSO (Dos à dos) ---
+    // 3. CRÉATION DU VERSO (IMAGE 2)
     const verso = document.createElement('a-image');
-    verso.setAttribute('src', data.images.verso);
-    // MÊME TAILLE
-    verso.setAttribute('width', '3.5');
-    verso.setAttribute('height', '2');
-    // On le tourne de 180° sur l'axe Y (comme une pièce de monnaie)
-    // Et on le tourne de 180° sur Z pour qu'il soit à l'endroit quand on retourne
+    verso.setAttribute('src', data.verso);
+    verso.setAttribute('width', '4');   // MÊME TAILLE
+    verso.setAttribute('height', '2.2');
+    // On tourne l'image de 180° pour qu'elle regarde "derrière"
     verso.setAttribute('rotation', '0 180 0'); 
-    verso.setAttribute('position', '0 0 -0.01'); // Légèrement décalé derrière
-    cardContainer.appendChild(verso);
+    verso.setAttribute('position', '0 0 -0.02'); // Légèrement derrière le centre
+    container.appendChild(verso);
 
-    // --- GESTION DU CLIC (INTERACTION) ---
-    // Quand on clique sur le conteneur, il tourne
-    cardContainer.addEventListener('click', () => {
-      // Si on est déjà tourné, on revient à 0, sinon on va à 180
-      const targetRotation = this.isFlipped ? '-90 0 0' : '-90 180 0'; 
-      // Si tu la veux debout (verticale), ce serait '0 0 0' et '0 180 0'
-      
-      // On lance l'animation
-      cardContainer.setAttribute('animation', {
-        property: 'rotation',
-        to: targetRotation,
-        dur: 800, // Durée en ms (0.8 seconde)
-        easing: 'easeInOutQuad' // Mouvement fluide
-      });
+    // 4. GESTION DU CLIC (INTERACTION DOIGT)
+    container.addEventListener('click', () => {
+        // Si on est recto (isFlipped = false), on tourne de 180°. Sinon on revient à 0.
+        // On garde -90 sur X pour rester à plat sur la table
+        const rotationVisee = this.isFlipped ? '-90 0 0' : '-90 180 0';
+        
+        container.setAttribute('animation', {
+            property: 'rotation',
+            to: rotationVisee,
+            dur: 800, // Durée de l'animation en millisecondes
+            easing: 'easeInOutCubic' // Mouvement fluide
+        });
 
-      // On inverse l'état
-      this.isFlipped = !this.isFlipped;
+        this.isFlipped = !this.isFlipped; // On inverse l'état
     });
 
-    parent.appendChild(cardContainer);
+    parent.appendChild(container);
   }
 });
