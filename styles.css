@@ -1,31 +1,32 @@
-/* style.css */
-
-/* On empêche le scroll car c'est une appli plein écran */
 body {
-  margin: 0;
-  overflow: hidden;
-  font-family: sans-serif;
+    margin: 0;
+    overflow: hidden; /* Empêche le scroll sur mobile */
+    font-family: sans-serif;
 }
 
-/* L'écran de chargement (Loader) */
-.arjs-loader {
-  height: 100%;
-  width: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  background-color: rgba(0, 0, 0, 0.8);
-  z-index: 9999;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+/* Écran de chargement */
+#loader {
+    position: fixed;
+    z-index: 9999;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    transition: opacity 0.5s ease-out, visibility 0.5s;
 }
 
-/* Le texte du chargement */
-.arjs-loader div {
-  text-align: center;
-  font-size: 1.25em;
-  color: white;
-  font-weight: bold;
-  letter-spacing: 1px;
+/* Classe pour cacher le loader */
+#loader.loaded {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.loader-content {
+    text-align: center;
 }
