@@ -1,24 +1,27 @@
 // js/main.js
 
+// On attend que toute la page HTML soit chargée
 window.addEventListener('load', () => {
-    console.log("Système AR Coutot-Masson : Initialisation...");
+    console.log("Application AR : Démarrage...");
 
     const scene = document.querySelector('a-scene');
     const loader = document.querySelector('.arjs-loader');
 
-    // Quand la scène AR est prête (caméra active + marqueurs chargés)
+    // 1. GESTION DU CHARGEMENT (LOADER)
+    // L'événement 'loaded' est déclenché quand la caméra est prête
     scene.addEventListener('loaded', () => {
-        console.log(">>> Scène chargée. Prêt à scanner le chat !");
+        console.log(">>> Caméra active et scène 3D prête !");
         
-        // On cache l'écran de chargement proprement
+        // On cache l'écran noir de chargement
         if (loader) {
             loader.style.display = 'none';
         }
     });
 
-    // Gestion des erreurs caméra (Bonus Architecture)
-    scene.addEventListener('camera-error', (e) => {
-        console.error("Erreur caméra détectée :", e);
-        alert("Impossible d'accéder à la caméra. Vérifiez les permissions.");
+    // 2. GESTION DES ERREURS CAMÉRA
+    // Si l'utilisateur refuse la caméra, on le prévient
+    scene.addEventListener('camera-error', (error) => {
+        console.error("Erreur d'accès à la caméra :", error);
+        alert("Attention : L'accès à la caméra est nécessaire pour voir la carte.");
     });
 });
