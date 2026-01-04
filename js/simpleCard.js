@@ -1,39 +1,51 @@
-// js/simpleCard.js
-
-AFRAME.registerComponent('simple-card', {
+AFRAME.registerComponent('dual-card-display', {
   schema: {
     jsonData: {type: 'string', default: 'assets/data.json'}
   },
 
   init: function () {
-    const el = this.el; // Le marqueur
-
-    // Récupération du chemin de l'image depuis le JSON
+    const el = this.el; // Le marqueur (le Chat)
+    
     fetch(this.data.jsonData)
       .then(response => response.json())
       .then(data => {
-        this.createCard(el, data.cardImage);
-      })
-      .catch(err => console.error("Erreur lecture JSON :", err));
+        this.createCards(el, data);
+      });
   },
 
-  createCard: function (parent, imagePath) {
-    // Création de l'élément image
-    const card = document.createElement('a-image');
+  createCards: function (parent, data) {
+    // --- CARTE 1 : RECTO (À GAUCHE) ---
+    const recto = document.createElement('a-image');
+    recto.setAttribute('src', data.images.recto);
+    recto.setAttribute('width', '1.6');  // Largeur ajustée
+    recto.setAttribute('height', '0.9'); // Hauteur ajustée
+    recto.setAttribute('rotation', '-90 0 0'); // À plat
+    recto.setAttribute('position', '-0.9 0 0'); // Décalé à gauche du chat
     
-    // Configuration
-    card.setAttribute('src', imagePath);
-    card.setAttribute('width', '4');     // Grande largeur
-    card.setAttribute('height', '2.2');  // Hauteur proportionnelle
-    
-    // Position : À plat sur le marqueur
-    card.setAttribute('rotation', '-90 0 0');
-    card.setAttribute('position', '0 0 0');
-    
-    // Animation d'apparition
-    card.setAttribute('animation', 'property: scale; from: 0 0 0; to: 1 1 1; dur: 1000; easing: easeOutElastic');
+    // Animation "Pop" (Échelle 0 à 1)
+    recto.setAttribute('animation', 'property: scale; from: 0 0 0; to: 1 1 1; dur: 1000; easing: easeOutElastic');
+    parent.appendChild(recto);
 
-    // Ajout à la scène
-    parent.appendChild(card);
+    // --- CARTE 2 : VERSO (À DROITE) ---
+    const verso = document.createElement('a-image');
+    verso.setAttribute('src', data.images.verso);
+    verso.setAttribute('width', '1.6');
+    verso.setAttribute('height', '0.9');
+    verso.setAttribute('rotation', '-90 0 0');
+    verso.setAttribute('position', '0.9 0 0'); // Décalé à droite du chat
+
+    // Animation "Pop" avec un petit délai
+    verso.setAttribute('animation', 'property: scale; from: 0 0 0; to: 1 1 1; dur: 1000; delay: 200; easing: easeOutElastic');
+    parent.appendChild(verso);
+
+    // --- TEXTE OPTIONNEL (Au dessus du chat) ---
+    const text = document.createElement('a-text');
+    text.setAttribute('value', 'NICOLAS COUTOT');
+    text.setAttribute('align', 'center');
+    text.setAttribute('color', 'white');
+    text.setAttribute('position', '0 0 -0.8'); // En haut du chat
+    text.setAttribute('rotation', '-90 0 0');
+    text.setAttribute('scale', '1.5 1.5 1.5');
+    parent.appendChild(text);
   }
 });

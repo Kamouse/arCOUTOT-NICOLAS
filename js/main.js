@@ -1,25 +1,38 @@
 // js/main.js
 
 window.addEventListener('load', () => {
-    console.log("Application AR : Initialisation...");
+    console.log("L'application AR est en cours d'initialisation...");
 
     const scene = document.querySelector('a-scene');
-    const loader = document.querySelector('.arjs-loader');
-
-    // 1. FIN DU CHARGEMENT
-    // Quand la caméra est active et la 3D prête
+    
+    // 1. Gestion de la fin du chargement
+    // L'événement 'loaded' est déclenché quand A-Frame et la caméra sont prêts
     scene.addEventListener('loaded', () => {
-        console.log(">>> Système prêt. En attente du marqueur.");
+        console.log("Scène chargée et prête !");
         
-        // On fait disparaître l'écran de chargement
+        // On masque le loader (si tu en as mis un dans le HTML/CSS)
+        const loader = document.querySelector('.arjs-loader');
         if (loader) {
             loader.style.display = 'none';
         }
     });
 
-    // 2. GESTION DES ERREURS
+    // 2. Gestion des erreurs de caméra (Optionnel mais très pro)
     scene.addEventListener('camera-error', (error) => {
-        console.error("Erreur d'accès caméra :", error);
-        alert("Erreur : L'accès à la caméra est requis pour l'expérience AR.");
+        console.error("Erreur d'accès à la caméra :", error);
+        alert("Erreur : Impossible d'accéder à la caméra. Vérifiez vos permissions.");
+    });
+
+    // 3. (Bonus) Détecter globalement si un marqueur est trouvé
+    // Cela permet de faire des actions sur toute la page (ex: jouer un son d'ambiance)
+    const markers = document.querySelectorAll('a-marker');
+    markers.forEach(marker => {
+        marker.addEventListener('markerFound', () => {
+            console.log(`Marqueur trouvé : ${marker.getAttribute('url')}`);
+        });
+        
+        marker.addEventListener('markerLost', () => {
+            console.log(`Marqueur perdu : ${marker.getAttribute('url')}`);
+        });
     });
 });
