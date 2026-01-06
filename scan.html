@@ -9,26 +9,52 @@
     <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.2/dist/mindar-image-aframe.prod.js"></script>
 
-    <!-- TES Scripts (Chemins mis à jour) -->
+    <!-- TES Scripts -->
     <script src="./js/components.js"></script>
     <script src="./js/main.js"></script>
 
-    <!-- TON Style (Chemin mis à jour) -->
+    <!-- TON Style -->
     <link rel="stylesheet" href="./css/style.css" />
+    
+    <style>
+        /* Style pour le conteneur du bouton retour */
+        #return-container {
+            position: fixed;
+            bottom: 30px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            z-index: 1000; /* Au-dessus de la vidéo AR */
+            pointer-events: none; /* Permet de cliquer "à travers" la zone vide */
+        }
+        
+        /* Style du bouton lui-même */
+        .btn-retour {
+            pointer-events: auto; /* Réactive le clic sur le bouton */
+            background-color: rgba(75, 0, 130, 0.85); /* Violet de ta charte */
+            color: white;
+            padding: 12px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-family: sans-serif;
+            font-weight: bold;
+            border: 2px solid rgba(255,255,255,0.8);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            transition: transform 0.2s, background-color 0.2s;
+            display: inline-block;
+        }
+
+        .btn-retour:active {
+            transform: scale(0.95);
+            background-color: rgba(75, 0, 130, 1);
+        }
+    </style>
 </head>
 
 <body>
-    <!-- Overlay de démarrage pour le son -->
-    <div id="start-overlay">
-        <div style="color: white; margin-bottom: 20px; text-align: center;">
-            <h1 style="margin:0;">NICOLAS COUTOT</h1>
-            <p>Mode AR</p>
-        </div>
-        <button id="start-button">ACTIVER LA CAMÉRA</button>
-        <!-- Petit lien retour au cas où -->
-        <a href="index.html" style="color:white; display:block; margin-top:20px; font-size:0.8rem;">Retour à l'accueil</a>
-    </div>
-
+    <!-- Scène AR -->
     <a-scene mindar-image="imageTargetSrc: ./assets/targets.mind; filterMinCF:0.0001; filterBeta: 0.001;"
         color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false"
         device-orientation-permission-ui="enabled: false">
@@ -46,7 +72,7 @@
 
         <a-entity mindar-image-target="targetIndex: 0" scan-sound="src: #sound-intro">
 
-            <!-- Bloc Info -->
+            <!-- Bloc Info (Haut) -->
             <a-entity position="0 0.9 0">
                 <a-plane color="white" width="2" height="1">
 
@@ -65,7 +91,7 @@
                 </a-plane>
             </a-entity>
 
-            <!-- Bloc Réseaux -->
+            <!-- Bloc Réseaux (Bas) -->
             <a-entity position="0 -0.8 0">
                 <a-image src="#icon-github" position="-0.5 0 0" width="0.3" height="0.3" class="clickable"
                     social-link="url: https://github.com/Kamouse"></a-image>
@@ -75,8 +101,26 @@
                     social-link="url: https://instagram.com/nicolas_coutot"></a-image>
             </a-entity>
 
-
         </a-entity>
     </a-scene>
+
+    <!-- Bouton Retour -->
+    <div id="return-container">
+        <a href="index.html" class="btn-retour">⬅ Retour</a>
+    </div>
+
+    <!-- Script de secours : Tente de débloquer le son si l'utilisateur touche l'écran -->
+    <script>
+        document.body.addEventListener('touchstart', function() {
+            const audio = document.getElementById('sound-intro');
+            if(audio && audio.paused) {
+                // On joue et coupe tout de suite pour "chauffer" le moteur audio
+                audio.play().then(() => {
+                    audio.pause();
+                    audio.currentTime = 0;
+                }).catch(() => { /* Ignorer les erreurs silencieuses */ });
+            }
+        }, { once: true }); // Ne s'exécute qu'une seule fois
+    </script>
 </body>
 </html>
