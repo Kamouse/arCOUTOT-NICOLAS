@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="fr">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Nicolas Coutot - AR Card</title>
@@ -10,55 +11,50 @@
 
     <script src="./js/components.js"></script>
     <link rel="stylesheet" href="./style.css" />
-  </head>
+</head>
 
-  <body>
-    <a-scene 
-      mindar-image="imageTargetSrc: ./assets/targets.mind; filterMinCF:0.0001; filterBeta: 0.001;" 
-      color-space="sRGB" 
-      renderer="colorManagement: true, physicallyCorrectLights" 
-      vr-mode-ui="enabled: false" 
-      device-orientation-permission-ui="enabled: false">
+<body>
+    <a-scene mindar-image="imageTargetSrc: ./assets/targets.mind; filterMinCF:0.0001; filterBeta: 0.001;"
+        color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false"
+        device-orientation-permission-ui="enabled: false">
 
-      <a-assets>
-        <img id="icon-github" src="./assets/icons/github.png" />
-        <img id="icon-linkedin" src="./assets/icons/linkedin.png" />
-        <img id="icon-insta" src="./assets/icons/instagram.png" />
-      </a-assets>
+        <a-assets>
+            <img id="icon-github" src="./assets/icons/github.png" />
+            <img id="icon-linkedin" src="./assets/icons/linkedin.png" />
+            <img id="icon-insta" src="./assets/icons/instagram.png" />
 
-      <a-camera position="0 0 0" look-controls="enabled: false">
-        <a-entity
-          cursor="fuse: false; rayOrigin: mouse;"
-          raycaster="far: 10000; objects: .clickable">
-        </a-entity>
-      </a-camera>
+            <audio id="sound-intro" src="./assets/sound.mp3" preload="auto"></audio>
+        </a-assets>
 
-      <a-entity mindar-image-target="targetIndex: 0">
-        
-        <a-entity position="0 0.8 0">
-            <a-plane color="#222" opacity="0.8" width="2" height="0.65" rx="0.1"></a-plane>
-            <a-text value="Nicolas Coutot\nFullstack Dev\n06 12 34 56 78" 
-                    align="center" color="white" width="4" position="0 0 0.01">
-            </a-text>
-        </a-entity>
+        <a-camera position="0 0 0" look-controls="enabled: false">
+            <a-entity cursor="fuse: false; rayOrigin: mouse;" raycaster="far: 10000; objects: .clickable">
+            </a-entity>
+        </a-camera>
 
-        <a-entity position="0 -0.8 0">
-            
-            <a-image src="#icon-github" position="-0.5 0 0" width="0.3" height="0.3"
-                     class="clickable" social-link="url: https://github.com/TonPseudo">
+        <a-entity mindar-image-target="targetIndex: 0" scan-sound="src: #sound-intro">
+
+            <a-entity position="0 0.8 0">
+                <a-plane color="#222" opacity="0.8" width="2" height="0.65" rx="0.1"></a-plane>
+                <a-text value="Nicolas Coutot\nFullstack Dev\n06 12 34 56 78" align="center" color="white" width="4"
+                    position="0 0 0.01">
+                </a-text>
+            </a-entity>
+
+            <a-image src="#icon-github" position="-0.5 0 0" width="0.3" height="0.3" class="clickable"
+                social-link="url: https://github.com/Kamouse">
             </a-image>
 
-            <a-image src="#icon-linkedin" position="0 0 0" width="0.3" height="0.3"
-                     class="clickable" social-link="url: https://linkedin.com/in/TonProfil">
+            <a-image src="#icon-linkedin" position="0 0 0" width="0.3" height="0.3" class="clickable"
+                social-link="url: www.linkedin.com/in/nicolas-coutot-87b0b72bb">
             </a-image>
 
-            <a-image src="#icon-insta" position="0.5 0 0" width="0.3" height="0.3"
-                     class="clickable" social-link="url: https://instagram.com/TonInsta">
+            <a-image src="#icon-insta" position="0.5 0 0" width="0.3" height="0.3" class="clickable"
+                social-link="url: https://instagram.com/nicolas_coutot">
             </a-image>
-            
         </a-entity>
 
-      </a-entity>
+        </a-entity>
     </a-scene>
-  </body>
+</body>
+
 </html>
