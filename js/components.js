@@ -2,7 +2,7 @@
 
 /**
  * COMPOSANT : SOCIAL-LINK
- * Gère l'animation au survol et la redirection au clic.
+ * Gère l'animation au survol et la redirection au clic sur les icônes.
  */
 AFRAME.registerComponent('social-link', {
   schema: {
@@ -13,7 +13,8 @@ AFRAME.registerComponent('social-link', {
     const el = this.el;
     const data = this.data;
 
-    // Animation "Pop" au survol
+    // --- Animation "Pop" (Zoom) ---
+    // Desktop (Souris) + Mobile (Toucher long ou tap)
     el.addEventListener('mouseenter', () => {
       el.setAttribute('scale', '1.2 1.2 1.2');
     });
@@ -22,10 +23,10 @@ AFRAME.registerComponent('social-link', {
       el.setAttribute('scale', '1 1 1');
     });
 
-    // Redirection
+    // --- Redirection ---
     el.addEventListener('click', () => {
       if (data.url) {
-        console.log(`Redirection vers : ${data.url}`);
+        console.log(`🔗 Redirection vers : ${data.url}`);
         window.open(data.url, '_blank');
       }
     });
@@ -34,7 +35,7 @@ AFRAME.registerComponent('social-link', {
 
 /**
  * COMPOSANT : SCAN-SOUND
- * Gère la lecture/pause du son lors de la détection de la cible.
+ * Gère la lecture du son quand la carte est détectée.
  */
 AFRAME.registerComponent('scan-sound', {
   schema: {
@@ -44,24 +45,29 @@ AFRAME.registerComponent('scan-sound', {
   init: function () {
     const audioEl = this.data.src;
     
-    // Si l'audio n'existe pas, on arrête là
+    // Sécurité : si pas d'audio, on ne fait rien
     if (!audioEl) {
-      console.warn("Scan-Sound: Aucun élément audio trouvé.");
+      console.warn("⚠️ Scan-Sound: Aucun fichier audio lié.");
       return;
     }
 
-    // Quand l'image est trouvée
+    // --- QUAND LA CARTE EST DÉTECTÉE ---
     this.el.addEventListener('targetFound', () => {
-      console.log("⚡ Cible détectée -> Lecture Audio");
-      audioEl.currentTime = 0; // Rembobiner
+      console.log("⚡ Cible détectée -> Lecture du son");
+      
+      // On rembobine pour que le son reparte du début
+      audioEl.currentTime = 0;
+      
+      // On lance la lecture
       audioEl.play().catch((e) => {
-        console.log("Lecture auto bloquée par le navigateur (attente d'interaction)", e);
+        // Si ça échoue ici, c'est que l'utilisateur n'a pas cliqué sur "Démarrer" au début
+        console.warn("❌ Lecture bloquée. L'utilisateur a-t-il cliqué sur le bouton Start ?", e);
       });
     });
 
-    // Quand l'image est perdue
+    // --- QUAND LA CARTE EST PERDUE ---
     this.el.addEventListener('targetLost', () => {
-      console.log("💨 Cible perdue -> Pause Audio");
+      console.log("💨 Cible perdue -> Pause du son");
       audioEl.pause();
     });
   }
