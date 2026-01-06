@@ -1,53 +1,64 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AR Business Card - NFT Version</title>
-    
-    <link rel="stylesheet" href="style.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Nicolas Coutot - AR Card</title>
 
     <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
-    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.2/dist/mindar-image-aframe.prod.js"></script>
 
-    <script src="js/simpleCard.js"></script>
-    <script src="js/main.js"></script>
-</head>
+    <script src="./js/components.js"></script>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
 
-<body style="margin: 0; overflow: hidden;">
-
-    <div id="loader">
-        <div class="loader-content">
-            <h1>Initialisation...</h1>
-            <p>Cela peut prendre quelques secondes.</p>
-            <p>Pointez la caméra vers la carte.</p>
-        </div>
-    </div>
-
+  <body>
     <a-scene 
-        vr-mode-ui="enabled: false"
-        renderer="logarithmicDepthBuffer: true;"
-        embedded
-        arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;">
+      mindar-image="imageTargetSrc: ./assets/targets.mind; filterMinCF:0.0001; filterBeta: 0.001;" 
+      color-space="sRGB" 
+      renderer="colorManagement: true, physicallyCorrectLights" 
+      vr-mode-ui="enabled: false" 
+      device-orientation-permission-ui="enabled: false">
 
-        <a-nft 
-            type="nft"
-            url="assets/mycard"
-            smooth="true"
-            smoothCount="10"
-            smoothTolerance=".01"
-            smoothThreshold="5"
-            simple-card>
-            </a-nft>
+      <a-assets>
+        <img id="icon-github" src="./assets/icons/github.png" />
+        <img id="icon-linkedin" src="./assets/icons/linkedin.png" />
+        <img id="icon-insta" src="./assets/icons/instagram.png" />
+      </a-assets>
 
-        <a-entity camera>
-            <a-entity 
-                cursor="rayOrigin: mouse" 
-                raycaster="objects: .clickable"
-                position="0 0 -1">
-            </a-entity>
+      <a-camera position="0 0 0" look-controls="enabled: false">
+        <a-entity
+          cursor="fuse: false; rayOrigin: mouse;"
+          raycaster="far: 10000; objects: .clickable">
+        </a-entity>
+      </a-camera>
+
+      <a-entity mindar-image-target="targetIndex: 0">
+        
+        <a-entity position="0 0.8 0">
+            <a-plane color="#222" opacity="0.8" width="2" height="0.65" rx="0.1"></a-plane>
+            <a-text value="Nicolas Coutot\nFullstack Dev\n06 12 34 56 78" 
+                    align="center" color="white" width="4" position="0 0 0.01">
+            </a-text>
         </a-entity>
 
+        <a-entity position="0 -0.8 0">
+            
+            <a-image src="#icon-github" position="-0.5 0 0" width="0.3" height="0.3"
+                     class="clickable" social-link="url: https://github.com/TonPseudo">
+            </a-image>
+
+            <a-image src="#icon-linkedin" position="0 0 0" width="0.3" height="0.3"
+                     class="clickable" social-link="url: https://linkedin.com/in/TonProfil">
+            </a-image>
+
+            <a-image src="#icon-insta" position="0.5 0 0" width="0.3" height="0.3"
+                     class="clickable" social-link="url: https://instagram.com/TonInsta">
+            </a-image>
+            
+        </a-entity>
+
+      </a-entity>
     </a-scene>
-</body>
+  </body>
 </html>
