@@ -1,71 +1,45 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Nicolas Coutot - AR</title>
-
-    <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.2/dist/mindar-image-aframe.prod.js"></script>
-
-    <script src="./js/components.js"></script>
-    <script src="./js/main.js"></script>
-    <link rel="stylesheet" href="./style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nicolas Coutot - Portfolio</title>
+    <!-- Import du style spécifique à l'accueil -->
+    <link rel="stylesheet" href="./css/home.css">
 </head>
-
 <body>
+
+    <div class="container">
+        <!-- En-tête -->
+        <header>
+            <h1>Nicolas Coutot</h1>
+            <p>Fullstack Developer</p>
+        </header>
+
+        <!-- Les 2 Boutons -->
+        <div class="actions">
+            <!-- Bouton 1 : Ouvre l'image (Géré par JS) -->
+            <button id="btn-show-card" class="btn primary">
+                👁️ Voir ma Carte
+            </button>
+
+            <!-- Bouton 2 : Lien vers la page AR -->
+            <a href="scan.html" class="btn secondary">
+                📷 Scanner la Carte (AR)
+            </a>
+        </div>
     </div>
-    <button id="start-button">DÉMARRER L'EXPÉRIENCE</button>
+
+    <!-- La Modal (Cachée par défaut) pour afficher l'image -->
+    <div id="card-modal" class="modal hidden">
+        <div class="modal-content">
+            <span id="close-modal" class="close">&times;</span>
+            <img src="./assets/1.png" alt="Carte de Visite Nicolas Coutot" class="card-image">
+            <p class="instruction">Vous pouvez maintenant cliquer sur "Scanner" pour voir la magie !</p>
+        </div>
     </div>
-    <a-scene mindar-image="imageTargetSrc: ./assets/targets.mind; filterMinCF:0.0001; filterBeta: 0.001;"
-        color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false"
-        device-orientation-permission-ui="enabled: false">
 
-        <a-assets>
-            <img id="icon-github" src="./assets/icons/github.png" />
-            <img id="icon-linkedin" src="./assets/icons/linkedin.png" />
-            <img id="icon-insta" src="./assets/icons/instagram.png" />
-            <audio id="sound-intro" src="./assets/sound.mp3" preload="auto"></audio>
-        </a-assets>
-
-        <a-camera position="0 0 0" look-controls="enabled: false">
-            <a-entity cursor="fuse: false; rayOrigin: mouse;" raycaster="far: 10000; objects: .clickable"></a-entity>
-        </a-camera>
-
-        <a-entity mindar-image-target="targetIndex: 0" scan-sound="src: #sound-intro">
-
-            <a-entity position="0 0.9 0">
-                <a-plane color="black" width="2.05" height="1.05" position="0 0 -0.01"></a-plane>
-
-                <a-plane color="white" width="2" height="1">
-
-                    <a-text value="NICOLAS COUTOT" color="black" align="center" position="0 0.2 0.01" width="3.5"
-                        font="roboto" shader="msdf" negate="false">
-                    </a-text>
-
-                    <a-plane color="black" width="1.2" height="0.15" position="0 0 0.01"></a-plane>
-                    <a-text value="Avenue Paoli , Res Grimaldi" color="white" align="center" position="0 0 0.02"
-                        width="2">
-                    </a-text>
-
-                    <a-text value="06 26 10 67 41" color="#4B0082" align="center" position="0 -0.2 0.01" width="3">
-                    </a-text>
-
-                </a-plane>
-            </a-entity>
-
-            <a-entity position="0 -0.8 0">
-                <a-image src="#icon-github" position="-0.5 0 0" width="0.3" height="0.3" class="clickable"
-                    social-link="url: https://github.com/Kamouse"></a-image>
-                <a-image src="#icon-linkedin" position="0 0 0" width="0.3" height="0.3" class="clickable"
-                    social-link="url: https://www.linkedin.com/in/nicolas-coutot-87b0b72bb"></a-image>
-                <a-image src="#icon-insta" position="0.5 0 0" width="0.3" height="0.3" class="clickable"
-                    social-link="url: https://instagram.com/nicolas_coutot"></a-image>
-            </a-entity>
-
-        </a-entity>
-    </a-scene>
+    <!-- Le Script pour gérer l'ouverture de l'image -->
+    <script src="./js/home.js"></script>
 </body>
-
 </html>
