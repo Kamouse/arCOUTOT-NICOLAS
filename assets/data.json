@@ -1,5 +1,23 @@
 {
-  "cardImage": "assets/1.png",
-  "width": 1,
-  "height": 0.55
+    "info": {
+      "phone": "+33 6 12 34 56 78",
+      "address": "12 Rue de la Fullstack, Paris"
+    },
+    "socials": [
+        {
+            "name": "github",
+            "icon": "assets/icon-github.png",
+            "url": "https://github.com/ton-pseudo"
+        },
+        {
+            "name": "linkedin",
+            "icon": "assets/icon-linkedin.png",
+            "url": "https://linkedin.com/in/ton-profil"
+        },
+        {
+            "name": "instagram",
+            "icon": "assets/icon-instagram.png",
+            "url": "https://instagram.com/ton-compte"
+        }
+    ]
 }

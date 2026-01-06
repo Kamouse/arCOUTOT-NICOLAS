@@ -2,20 +2,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const loader = document.getElementById('loader');
     const scene = document.querySelector('a-scene');
 
-    // Écouteur pour savoir quand la scène A-Frame est prête
     if (scene) {
+        // 1. Écoute du chargement de la scène
         scene.addEventListener('loaded', () => {
-            console.log('Scène AR chargée.');
-            // Petit délai pour s'assurer que tout est stable visuellement
+            console.log('Scène A-Frame chargée.');
+
+            // 2. POUR LE NFT (Image Tracking) :
+            // Le calcul initial est lourd. On augmente le délai à 2500ms (2.5 sec)
+            // pour éviter que l'utilisateur ne voie un écran noir ou figé au début.
             setTimeout(() => {
                 loader.classList.add('loaded');
-            }, 1000);
+            }, 2500); 
+        });
+
+        // 3. Gestion des erreurs de caméra
+        // (Je l'ai déplacé DANS le if(scene) pour éviter des bugs si la scène n'existe pas)
+        scene.addEventListener('camera-error', (error) => {
+            alert("Erreur : Impossible d'accéder à la caméra. Vérifiez qu'un autre onglet ne l'utilise pas et que vous êtes bien en HTTPS.");
+            console.error("Erreur caméra", error);
         });
     }
-
-    // Gestion basique des erreurs de caméra (si l'utilisateur refuse l'accès)
-    scene.addEventListener('camera-error', (error) => {
-        alert("Erreur : Impossible d'accéder à la caméra. Vérifiez vos permissions.");
-        console.error("Erreur caméra", error);
-    });
 });
