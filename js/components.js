@@ -1,33 +1,31 @@
 // Fichier : js/components.js
 
 /**
- * COMPOSANT 1 : SOCIAL-LINK
- * Gère les interactions sur les icônes (Zoom au survol + Redirection au clic)
+ * COMPOSANT : SOCIAL-LINK
+ * Gère l'animation au survol et la redirection au clic.
  */
 AFRAME.registerComponent('social-link', {
   schema: {
-    url: { type: 'string', default: '' } // L'URL vers laquelle rediriger
+    url: { type: 'string', default: '' }
   },
 
   init: function () {
     const el = this.el;
     const data = this.data;
 
-    // --- Interaction : Survol (Desktop) / Toucher maintenu (Mobile) ---
-    // Agrandit l'icône pour un effet "pop"
+    // Animation "Pop" au survol
     el.addEventListener('mouseenter', () => {
       el.setAttribute('scale', '1.2 1.2 1.2');
     });
 
-    // Revient à la taille normale quand le curseur quitte l'élément
     el.addEventListener('mouseleave', () => {
       el.setAttribute('scale', '1 1 1');
     });
 
-    // --- Interaction : Clic ---
+    // Redirection
     el.addEventListener('click', () => {
       if (data.url) {
-        // Ouvre le lien dans un nouvel onglet
+        console.log(`Redirection vers : ${data.url}`);
         window.open(data.url, '_blank');
       }
     });
@@ -35,43 +33,35 @@ AFRAME.registerComponent('social-link', {
 });
 
 /**
- * COMPOSANT 2 : SCAN-SOUND
- * Gère la lecture audio lorsque la cible d'image est détectée
+ * COMPOSANT : SCAN-SOUND
+ * Gère la lecture/pause du son lors de la détection de la cible.
  */
 AFRAME.registerComponent('scan-sound', {
   schema: {
-    src: { type: 'selector' } // Référence à l'élément <audio> dans le HTML
+    src: { type: 'selector' } // ID de la balise <audio>
   },
 
   init: function () {
-    const el = this.el;
     const audioEl = this.data.src;
-
+    
+    // Si l'audio n'existe pas, on arrête là
     if (!audioEl) {
-      console.warn("Audio element not found in scan-sound component.");
+      console.warn("Scan-Sound: Aucun élément audio trouvé.");
       return;
     }
 
-    // --- Événement : Cible Trouvée (Target Found) ---
-    el.addEventListener('targetFound', () => {
-      console.log("Cible détectée : Lecture du son");
-      
-      // Remet le son au début pour qu'il soit joué en entier à chaque scan
-      audioEl.currentTime = 0;
-      
-      // Tentative de lecture
-      // Note : Peut échouer si l'utilisateur n'a pas encore interagi avec la page (Autoplay Policy)
-      audioEl.play().catch((error) => {
-        console.log("Lecture audio bloquée (attente d'interaction utilisateur) :", error);
+    // Quand l'image est trouvée
+    this.el.addEventListener('targetFound', () => {
+      console.log("⚡ Cible détectée -> Lecture Audio");
+      audioEl.currentTime = 0; // Rembobiner
+      audioEl.play().catch((e) => {
+        console.log("Lecture auto bloquée par le navigateur (attente d'interaction)", e);
       });
     });
 
-    // --- Événement : Cible Perdue (Target Lost) ---
-    el.addEventListener('targetLost', () => {
-      console.log("Cible perdue : Pause du son");
-      
-      // Met le son en pause quand la carte sort du champ de vision
-      // (Tu peux commenter cette ligne si tu veux que le son continue jusqu'au bout)
+    // Quand l'image est perdue
+    this.el.addEventListener('targetLost', () => {
+      console.log("💨 Cible perdue -> Pause Audio");
       audioEl.pause();
     });
   }

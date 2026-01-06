@@ -1,76 +1,19 @@
-/* style.css */
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;900&display=swap');
+/* Fichier : style.css */
 
+/* Configuration de base de la page */
 body {
     margin: 0;
-    overflow: hidden;
-    font-family: 'Montserrat', sans-serif;
+    overflow: hidden; /* Empêche le scroll pendant l'expérience AR */
+    font-family: sans-serif;
 }
 
-/* Cache le bouton VR par défaut */
-.a-enter-vr-button { display: none; }
-
-/* --- LE CONTAINER DE LA CARTE VIRTUELLE --- */
-#ar-card-overlay {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%); /* Centré parfaitement */
-    
-    background: rgba(255, 255, 255, 0.95); /* Blanc légèrement transparent */
-    padding: 30px;
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2); /* Ombre douce pour le relief */
-    text-align: center;
-    
-    /* Animation d'apparition */
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    opacity: 0;
-    pointer-events: none; /* Inactif quand invisible */
-    scale: 0.8;
-    
-    /* Largeur max pour mobile */
-    width: 80%;
-    max-width: 320px;
-    z-index: 1000;
+/* Cache le bouton "VR" en bas à droite (inutile en AR sur téléphone) */
+.a-enter-vr-button {
+    display: none;
 }
 
-/* Quand la classe 'visible' est ajoutée par le JS */
-#ar-card-overlay.visible {
-    opacity: 1;
-    pointer-events: auto;
-    scale: 1;
-    top: 30%; /* On le remonte un peu pour laisser la place aux icones 3D en bas */
-}
-
-/* --- LE NOM (NICOLAS COUTOT) --- */
-.card-name {
-    font-weight: 900; /* Extra Bold comme sur l'image */
-    font-size: 2.2rem;
-    line-height: 0.9;
-    color: #000;
-    margin: 0 0 15px 0;
-    text-transform: uppercase;
-    letter-spacing: -1px;
-}
-
-/* --- LE BADGE (Fullstack Dev) --- */
-.card-adress {
-    display: inline-block;
-    border: 3px solid #000; /* Le contour noir épais */
-    border-radius: 50px;    /* Forme de pillule */
-    padding: 8px 20px;
-    font-weight: 500;
-    font-size: 1rem;
-    color: #000;
-    margin-bottom: 15px;
-    background: transparent;
-}
-
-/* --- LE TÉLÉPHONE --- */
-.card-phone {
-    font-weight: 900;
-    font-size: 1.2rem;
-    color: #4B0082; /* Petit clin d'œil au violet de l'image, ou mets #000 */
-    margin: 0;
+/* Optionnel : Si tu veux personnaliser l'écran de chargement "Loading..." */
+.mindar-ui-loading .loader {
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid #4B0082; /* Violet */
 }
